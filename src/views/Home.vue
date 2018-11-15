@@ -9,6 +9,7 @@
 </template>
 
 <script>
+    let mainBlockHash
     const data2 = {
         "blockHash": "00000000000000000009f3ff707615878f142bb4c13a50f7162418d107f1f60e",
         "blockHeight": 550188,
@@ -189,24 +190,34 @@
             }
         ]
     }
-
     const recursionData = (data) => {
             data.name = data.height
             data.value = `diffculty: ${data.chainDifficulty} Pool: ${data.minePool}`
+            if (data.tiphash) {
+                mainBlockHash = data.tiphash
+            }
             if ((data.children) && data.children.length !== -1) {
                     data.children.forEach((item) => {
                         recursionData(item)
                     })
+                } else {
+                console.log('mainBlockHash', mainBlockHash)
+                if (data.blockHash && mainBlockHash && mainBlockHash === data.blockHash) {
+                    data.value += ` Main Chain`
                 }
-            console.log(data)
+            }
             return data
           }
-    recursionData(data2)
     export default {
         name: 'home',
         data() {
             return {
-                treeData: {}
+                treeData: {},
+            }
+        },
+        watch: {
+            treeData () {
+                this.initE()
             }
         },
         methods: {
@@ -255,20 +266,20 @@
                     ]
                 }
                 myChart.setOption(option)
-            }
+            },
+            getData() {
+                this.$axios.get('/getdata').then(response =>{
+                    this.treeData = recursionData(response)
+                }).catch(error=>{
+                    console.log(error)
+                })
+            },
         },
         mounted() {
-            this.$axios.get('/getdata').then(response =>{
-                console.log(response)
-                this.treeData = recursionData(response)
-                this.initE()
-            }).catch(error=>{
-                console.log(error)
-            })
-
+            this.getData()
             setInterval(() => {
-                this.$router.go(0)
-            }, 180000)
+                this.getData()
+            }, 2000)
         }
     }
 </script>
