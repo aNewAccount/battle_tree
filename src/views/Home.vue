@@ -192,7 +192,7 @@
     }
     const recursionData = (data) => {
             data.name = data.height
-            data.value = `diffculty: ${data.chainDifficulty} Pool: ${data.minePool}`
+            data.value = `Pool: ${data.minePool} BlockHash: ${data.blockHash}`
             if (data.tiphash) {
                 mainBlockHash = data.tiphash
             }
@@ -213,6 +213,7 @@
         data() {
             return {
                 treeData: {},
+                tableData: []
             }
         },
         watch: {
