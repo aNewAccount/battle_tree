@@ -1,7 +1,7 @@
 var config = {
   devServer: {
     port: 8080,
-    proxy: 'http://10.29.128.43:8097'
+    proxy: 'http://114.215.30.211:5000/'
   },
   pluginOptions: {},
   transpileDependencies: [

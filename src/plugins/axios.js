@@ -10,7 +10,7 @@ let ERROR_DEFAULT = 'Network Error,Please try later'
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
 
 let config = {
-  baseURL: '',
+  baseURL: '/api',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
   },

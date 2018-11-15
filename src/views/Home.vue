@@ -1,6 +1,9 @@
 <template>
     <div>
-        <div ref="my-e" style="width: 100%;height:100%;">
+        <h2>Battle Of Miner Power !</h2>
+        <div style="margin-top: 100px">
+            <div ref="my-e" style="width: 100%;height:100%;">
+            </div>
         </div>
     </div>
 </template>
@@ -188,9 +191,8 @@
     }
 
     const recursionData = (data) => {
-            console.log(data.minePool)
-            data.name = data.blockHeight
-            data.value = data.chainDiffculty
+            data.name = data.height
+            data.value = `diffculty: ${data.chainDifficulty} Pool: ${data.minePool}`
             if ((data.children) && data.children.length !== -1) {
                     data.children.forEach((item) => {
                         recursionData(item)
@@ -213,7 +215,8 @@
                 let option = {
                     tooltip: {
                         trigger: 'item',
-                        triggerOn: 'mousemove'
+                        triggerOn: 'mousemove',
+                        formatter: '{c}'
                     },
                     series: [
                         {
@@ -255,12 +258,17 @@
             }
         },
         mounted() {
-            // this.treeData = {
-            //     name: 'f',
-            //     value: '1123 <br/> 123',
-            // }
-            this.treeData = recursionData(data2)
-            this.initE()
+            this.$axios.get('/getdata').then(response =>{
+                console.log(response)
+                this.treeData = recursionData(response)
+                this.initE()
+            }).catch(error=>{
+                console.log(error)
+            })
+
+            setInterval(() => {
+                this.$router.go(0)
+            }, 180000)
         }
     }
 </script>
